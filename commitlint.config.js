@@ -15,6 +15,7 @@ scopes.push(
   'core',
   'docker',
   'app',
+  'infra',
 );
 
 module.exports = {

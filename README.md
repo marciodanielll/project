@@ -5,10 +5,9 @@
 
 1. [Prerequisites](#prerequisites)
 2. [Environment Variables](#environment-variables)
-3. [Commands](#commands)
+3. [Running the Manager Script](#running-the-manager-script)
 4. [Package Management](#package-management)
-5. [Git Configurations](#git-configurations)
-6. [Git Hooks and Conventional Commits](#git-hooks-and-conventional-commits)
+5. [Git Hooks and Conventional Commits](#git-hooks-and-conventional-commits)
 
 ## Prerequisites
 
@@ -27,75 +26,55 @@ CONTAINER_PORT=3000
 NODE_ENV=development
 ```
 
-## Commands
+## Running the Manager Script
 
-1. **Build the Docker container (only required on the first setup):**
+A script named `manager.sh` is available within the `scripts` directory to manage various environment-related tasks. The script includes options for deploying, starting, restarting, cleaning, and logging the environment.
 
-   ```bash
-   docker-compose up --build -d
-   ```
+To run the script, use:
 
-2. **Start the application (use this command after the initial build):**
+```bash
+./scripts/manager.sh
+```
 
-   ```bash
-   docker-compose up
-   ```
+### Script Menu Options
 
-3. **View the last 100 logs of the application (continuously displaying logs):**
+Once executed, the `manager.sh` script will display a menu with the following options:
 
-   ```bash
-   docker-compose logs -f --tail=100
-   ```
+- **1. Deploy Environment**  
+  Builds and starts the application container(s) in the background.
 
-4. **Access the terminal inside the container:**
+- **2. Start Environment**  
+  Starts the environment container(s) without rebuilding.
 
-   ```bash
-   docker exec -it nest-app /bin/sh
-   ```
+- **3. Restart Environment**  
+  Restarts the application container(s) to apply any changes.
 
-5. **Restart the container:**
+- **4. Clean Environment**  
+  Stops and removes containers, networks, and volumes.
 
-   ```bash
-   docker-compose restart
-   ```
+- **5. Run Seeds**  
+  Executes database seed commands.
 
-6. **Check container status:**
+- **6. Clear Seeds**  
+  Clears seeded data from the database.
 
-   ```bash
-   docker-compose ps
-   ```
+- **7. View App Logs**  
+  Shows real-time logs from the application container.
 
-7. **Stop all containers:**
+- **8. View Database Logs**  
+  Shows real-time logs from the database container.
 
-   ```bash
-   docker-compose stop
-   ```
+- **9. Open Shell in App Container**  
+  Opens an interactive shell within the application container.
 
-8. **Remove containers, networks, and volumes:**
+- **10. Exit**  
+  Exits the script menu.
 
-   ```bash
-   docker-compose down -v
-   ```
-
-9. **Remove unused volumes:**
-
-   ```bash
-   docker volume prune
-   ```
-
-10. **Update image and recreate container:**
-
-    ```bash
-    docker-compose pull && docker-compose up -d --build
-    ```
+> **Note**: Committing from within the container is supported on Unix-like systems (Linux or macOS).
 
 ## Package Management
 
 - All packages should be installed from within the container. Run the package installation commands inside the container using the terminal command provided above.
-
-## Git Configurations
-
-> Note: The container currently does not have Git configurations set up. Perform any Git-related tasks on the host machine terminal until further notice.
 
 ## Git Hooks and Conventional Commits
 
