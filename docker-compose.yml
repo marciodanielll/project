@@ -8,8 +8,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - ${SSH_VOLUME}:/root/.ssh
-      - ${GITCONFIG_VOLUME}:/root/.gitconfig
+      - ${SSH_VOLUME}:/root/.ssh:ro
+      - ${GITCONFIG_VOLUME}:/root/.gitconfig:ro
     ports:
       - "${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}"
     environment:

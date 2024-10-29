@@ -10,4 +10,6 @@ RUN npm install
 
 RUN apk add git
 
+RUN apk add openssh
+
 CMD ["npm", "run", "start:debug"]
