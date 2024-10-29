@@ -1,17 +1,20 @@
 services:
   nest-app:
+    working_dir: /app
     build:
-      context: ./backend/docker
-      dockerfile: Dockerfile.dev
+      context: .
+      dockerfile: Dockerfile
     env_file: .env
     volumes:
-      - ./backend:/app
+      - .:/app
       - /app/node_modules
     ports:
       - "${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}"
     environment:
       - NODE_ENV=development
+      - PORT=${CONTAINER_PORT:-3000}
     tty: true
     stdin_open: true
     container_name: nest-app
-    command: /bin/sh
+    # Inicia o servidor em modo debug
+    command: npm run start:debug
