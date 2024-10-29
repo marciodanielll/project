@@ -14,6 +14,7 @@ for (const path of getDirectories('./src').map((p) => `./src/${p}`)) {
 scopes.push(
   'core',
   'docker',
+  'app',
 );
 
 module.exports = {
