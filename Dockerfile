@@ -8,4 +8,6 @@ COPY . .
 
 RUN npm install
 
+RUN apk add git
+
 CMD ["npm", "run", "start:debug"]

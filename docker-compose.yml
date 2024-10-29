@@ -8,6 +8,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - ${SSH_VOLUME}:/root/.ssh
+      - ${GITCONFIG_VOLUME}:/root/.gitconfig
     ports:
       - "${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}"
     environment:
@@ -18,4 +20,23 @@ services:
     container_name: nest-app
     image: nest-app
     command: sh -c "npm run start:dev"
-   
+    networks:
+      - shared-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    env_file: .env
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - shared-network
+
+volumes:
+  mongo-data:
+
+networks:
+  shared-network:
+    driver: bridge
