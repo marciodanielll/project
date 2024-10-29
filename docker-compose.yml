@@ -16,5 +16,6 @@ services:
     tty: true
     stdin_open: true
     container_name: nest-app
-    # Inicia o servidor em modo debug
-    command: npm run start:debug
+    image: nest-app
+    command: sh -c "npm run start:dev"
+   
