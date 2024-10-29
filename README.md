@@ -1,6 +1,15 @@
 
 # Application Setup Guide
 
+## Index
+
+1. [Prerequisites](#prerequisites)
+2. [Environment Variables](#environment-variables)
+3. [Commands](#commands)
+4. [Package Management](#package-management)
+5. [Git Configurations](#git-configurations)
+6. [Git Hooks and Conventional Commits](#git-hooks-and-conventional-commits)
+
 ## Prerequisites
 
 - **Docker**: Version 27.3.1
@@ -51,3 +60,16 @@ NODE_ENV=development
 ## Git Configurations
 
 > Note: The container currently does not have Git configurations set up. Perform any Git-related tasks on the host machine terminal until further notice.
+
+## Git Hooks and Conventional Commits
+
+This application uses **Husky** to set up Git hooks that ensure commits adhere to the Conventional Commits standard before they are applied. For more information about Conventional Commits and its configuration, refer to [the Conventional Commits documentation](https://www.conventionalcommits.org/).
+
+If you need to add a scope for commit rules, go to the `commitlint.config.js` file and add the desired scope as follows:
+
+```javascript
+scopes.push(
+  'core',
+  'docs'
+);
+```
