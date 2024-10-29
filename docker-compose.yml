@@ -1,0 +1,17 @@
+services:
+  nest-app:
+    build:
+      context: ./backend/docker
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - "${HOST_PORT:-3000}:${CONTAINER_PORT:-3000}"
+    environment:
+      - NODE_ENV=development
+    tty: true
+    stdin_open: true
+    container_name: nest-app
+    command: /bin/sh
