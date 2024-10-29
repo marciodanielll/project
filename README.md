@@ -41,10 +41,10 @@ NODE_ENV=development
    docker-compose up
    ```
 
-3. **View the last 100 logs of the application:**
+3. **View the last 100 logs of the application (continuously displaying logs):**
 
    ```bash
-   docker-compose logs --tail=100
+   docker-compose logs -f --tail=100
    ```
 
 4. **Access the terminal inside the container:**
@@ -52,6 +52,42 @@ NODE_ENV=development
    ```bash
    docker exec -it nest-app /bin/sh
    ```
+
+5. **Restart the container:**
+
+   ```bash
+   docker-compose restart
+   ```
+
+6. **Check container status:**
+
+   ```bash
+   docker-compose ps
+   ```
+
+7. **Stop all containers:**
+
+   ```bash
+   docker-compose stop
+   ```
+
+8. **Remove containers, networks, and volumes:**
+
+   ```bash
+   docker-compose down -v
+   ```
+
+9. **Remove unused volumes:**
+
+   ```bash
+   docker volume prune
+   ```
+
+10. **Update image and recreate container:**
+
+    ```bash
+    docker-compose pull && docker-compose up -d --build
+    ```
 
 ## Package Management
 
