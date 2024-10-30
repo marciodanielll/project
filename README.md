@@ -24,11 +24,17 @@ Create a `.env` file in the project root directory with the following configurat
 HOST_PORT=3000
 CONTAINER_PORT=3000
 NODE_ENV=development
+
+MONGO_PORT=27017
+MONGO_INITDB_ROOT_USERNAME=root
+MONGO_INITDB_ROOT_PASSWORD=example
+MONGO_DB=example
+MONGO_URL=mongodb://root:example@mongo:27017/example
 ```
 
 ## Running the Manager Script
 
-A script named `manager.sh` is available within the `scripts` directory to manage various environment-related tasks. The script includes options for deploying, starting, restarting, cleaning, and logging the environment.
+A script named `manager.sh` is available within the `scripts` directory to manage various environment-related tasks. The script includes options for deploying, starting, restarting, cleaning, logging, and monitoring the environment status.
 
 To run the script, use:
 
@@ -67,7 +73,10 @@ Once executed, the `manager.sh` script will display a menu with the following op
 - **9. Open Shell in App Container**  
   Opens an interactive shell within the application container.
 
-- **10. Exit**  
+- **10. Check Containers Status**  
+  Displays the status of each container, indicating if it's running or stopped.
+
+- **11. Exit**  
   Exits the script menu.
 
 > **Note**: Committing from within the container is supported on Unix-like systems (Linux or macOS).
