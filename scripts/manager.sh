@@ -1,10 +1,12 @@
 #!/bin/bash
 
+# Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
+MAGENTA='\033[0;35m'
 
 show_header() {
   echo -e "${BLUE}==============================${NC}"
@@ -23,29 +25,29 @@ show_menu() {
   echo -e "${YELLOW}7${NC} - View App Logs"
   echo -e "${YELLOW}8${NC} - View Database Logs"
   echo -e "${YELLOW}9${NC} - Open Shell in App Container"
-  echo -e "${YELLOW}10${NC} - Exit"
+  echo -e "${YELLOW}10${NC} - Containers Status"
+  echo -e "${YELLOW}11${NC} - Exit"
 }
 
 set_volume_env_vars() {
-    if ! grep -q "^SSH_VOLUME=" ../.env; then
-        echo "SSH_VOLUME=$(find ~ -maxdepth 1 -type d -name ".ssh")" >> ../.env
-    fi
+  if ! grep -q "^SSH_VOLUME=" ../.env; then
+    echo "SSH_VOLUME=$(find ~ -maxdepth 1 -type d -name ".ssh")" >> ../.env
+  fi
 
-    if ! grep -q "^GITCONFIG_VOLUME=" ../.env; then
-        echo "GITCONFIG_VOLUME=$(find ~ -maxdepth 1 -type f -name ".gitconfig")" >> ../.env
-    fi
+  if ! grep -q "^GITCONFIG_VOLUME=" ../.env; then
+    echo "GITCONFIG_VOLUME=$(find ~ -maxdepth 1 -type f -name ".gitconfig")" >> ../.env
+  fi
 }
 
-while true; do
-  clear
-  set_volume_env_vars
-  show_header
-  show_menu
+check_dependencies() {
+  if ! command -v docker-compose &> /dev/null; then
+    echo -e "${RED}docker-compose could not be found. Please install it first.${NC}"
+    exit 1
+  fi
+}
 
-  echo
-  read -p "$(echo -e ${GREEN}Enter your choice:${NC} ) " choice
-  echo
-  case $choice in
+handle_choice() {
+  case $1 in
     1)
       echo -e "${GREEN}Deploying environment...${NC}"
       sudo docker-compose up --build -d
@@ -76,25 +78,54 @@ while true; do
       ;;
     7)
       echo -e "${GREEN}Viewing app logs...${NC}"
-      sudo docker-compose logs -f nest-app
+      sudo docker-compose logs -f nest-app --tail 100
       ;;
     8)
       echo -e "${GREEN}Viewing database logs...${NC}"
-      sudo docker-compose logs -f mongo
+      sudo docker-compose logs -f mongo --tail 100
       ;;
     9)
       echo -e "${GREEN}Opening shell in app container...${NC}"
       sudo docker-compose exec -it nest-app sh
       ;;
     10)
+      echo -e "${GREEN}Checking containers status...${NC}"
+      echo -e "${MAGENTA}==========================================${NC}"
+      echo -e "${GREEN}Container Name          Status${NC}"
+      echo -e "${MAGENTA}==========================================${NC}"
+      containers=$(sudo docker-compose ps --format "{{.Names}}\t\t{{.Status}}" | grep -v '<no value>')
+  
+      echo "$containers" | while IFS=$'\t' read -r name status; do
+        if [[ $status == *"Up"* ]]; then
+         printf "%-25s ${GREEN}%-10s${NC}\n" "$name" "Up"
+        else
+         printf "%-25s ${RED}%-10s${NC}\n" "$name" "$status"
+        fi
+      done
+      echo -e "${MAGENTA}==========================================${NC}"
+      ;;
+    11)
       echo -e "${RED}Exiting...${NC}"
-      pkill -P $$
       exit 0
       ;;
     *)
       echo -e "${RED}Invalid choice, please try again.${NC}"
       ;;
   esac
+}
+
+trap "" SIGINT SIGTERM
+
+check_dependencies
+while true; do
+  clear
+  set_volume_env_vars
+  show_header
+  show_menu
+  echo
+  read -p "$(echo -e ${GREEN}Enter your choice:${NC} ) " choice
+  echo
+  handle_choice $choice
   echo
   read -p "Press Enter to continue..."
 done
